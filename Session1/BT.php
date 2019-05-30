@@ -1,8 +1,8 @@
 <?php
    $x = 5;
-   if(x>=1 && x<=12){
-        if(! x=2){
-            if(x=4 || x=6 || x=9 || x=11){
+   if($x>=1 && $x<=12){
+        if( $x!=2){
+            if($x==4 || $x==6 || $x==9 || $x==11){
                 echo "Day la thang trong nam <br/> Thang nay co 30 ngay";
             }else{
                 echo "Day la thang trong nam <br/> Thang nay co 31 ngay";
@@ -21,5 +21,7 @@
                 echo "Day la nam khong nhuan <br/> Thang 2 co 28 ngay";
             }
         }
+   }else{
+       echo "Day khong phai la thang trong nam";
    } 
 ?>
