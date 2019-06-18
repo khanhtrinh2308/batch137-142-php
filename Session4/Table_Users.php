@@ -1,10 +1,6 @@
 <?php
-$host = "localhost";
-$user = "sa";
-$password = "123456";
-$database = "session4";
-$conn = mysqli_connect($host, $user, $password, $database);
-$fullname = $email = $gender = $phone = $avatar = $birthday = '';
+include_once "Connect.php";
+$fullname = $email = $gender = $phone = $avatar = $birthday = $id = '';
 ?>
 
 <!DOCTYPE html>
@@ -27,6 +23,9 @@ $fullname = $email = $gender = $phone = $avatar = $birthday = '';
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="Lib_Table/css/util.css">
     <link rel="stylesheet" type="text/css" href="Lib_Table/css/main.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!--===============================================================================================-->
 </head>
 
@@ -44,13 +43,15 @@ $fullname = $email = $gender = $phone = $avatar = $birthday = '';
                                 <th class="cell100 column4">Gender</th>
                                 <th class="cell100 column5">Birthday</th>
                                 <th class="cell100 column6">Avatar</th>
+                                <th class="cell100 column6"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $sql = 'SELECT fullname, email, phone, gender, birthday, avatar FROM USERS';
+                            $sql = 'SELECT id, fullname, email, phone, gender, birthday, avatar FROM USERS';
                             $result = mysqli_query($conn, $sql);
                             while ($row = mysqli_fetch_assoc($result)) {
+                                $id = $row["id"];
                                 $fullname = $row["fullname"];
                                 $email = $row["email"];
                                 $phone = $row["phone"];
@@ -64,6 +65,10 @@ $fullname = $email = $gender = $phone = $avatar = $birthday = '';
                                     <td class='cell100 column4'>$gender</td>
                                     <td class='cell100 column5'>$birthday</td>
                                     <td class='cell100 column6'><img src='uploads/$avatar' class='img-thumbnail' width='80px'/></td>
+                                    <td class='cell100 column6'>
+                                        <button style='color : green' type='button'><span class='	glyphicon glyphicon-list-alt' onclick=\"location.href='/batch137-142-php/Session4/Edit.php?id=$id'\"> </span></button>
+                                        <button style='color : red' type='button' onclick=\"location.href='/batch137-142-php/Session4/Delete.php?id=$id'\"><span class='glyphicon glyphicon-trash'> </span></button>
+                                     </td>
                                 </tr>";
                             }
                             mysqli_close($conn);
