@@ -1,6 +1,7 @@
 <?php
 include_once "Connect.php";
 $fullName = $birthday = $gender = $phone = $email = $avatarName = '';
+
 $checkRegister = true;
 if (isset($_POST['submit'])) {
     $fullName =  $_POST['full_name'];
@@ -20,18 +21,27 @@ if (isset($_POST['submit'])) {
     if ($phone == '') {
         $checkRegister = false;
     }
-    if ($email == '') {
+    if ($email == '' ) {
+        $checkRegister = false;
+    }
+    $sql = "SELECT Email FROM users WHERE Email = '$email'";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) == 0) {
+        $checkRegister = true;
+    }else{
         $checkRegister = false;
     }
     if ($_FILES['avatar']['error'] == 0) {
         $errAvatar = '';
     } else {
-        $checkRegister = false;
+        $avatarName = 'default.jpg';
     }
     if ($checkRegister) {
-        $randomName = uniqid();
-        $avatarName = $randomName . "_" . $_FILES['avatar']['name'];
-        move_uploaded_file($_FILES['avatar']['tmp_name'], 'uploads/' . $avatarName);
+        if($_FILES['avatar']['error'] == 0){
+            $randomName = uniqid();
+            $avatarName = $randomName . "_" . $_FILES['avatar']['name'];
+            move_uploaded_file($_FILES['avatar']['tmp_name'], 'uploads/' . $avatarName);
+        }
         $sql = "INSERT INTO users (FullName, Email, Phone, Gender, Birthday, Avatar) VALUES ('$fullName', '$email', '$phone', '$gender', '$birthday', '$avatarName')";
         $result = mysqli_query($conn, $sql);
         mysqli_close($conn);
@@ -150,9 +160,9 @@ if (isset($_POST['submit'])) {
                 required: true,
                 date: true
             },
-            avatar: {
-                required: true
-            },
+            // avatar: {
+            //     required: true
+            // },
             email: {
                 required: true,
                 email: true

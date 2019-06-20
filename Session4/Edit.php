@@ -2,7 +2,7 @@
 include_once "Connect.php";
 $id = $_GET['id'];
 $fullName = $birthday = $gender = $phone = $email = $avatarName = '';
-$sql = "SELECT * FROM users WHERE id=$id";
+$sql = "SELECT * FROM users WHERE Id=$id";
 $result = mysqli_query($conn, $sql);
 $userEdit = $result->fetch_assoc();
 $checkRegister = true;
@@ -27,22 +27,36 @@ if (isset($_POST['submit'])) {
     if ($email == '') {
         $checkRegister = false;
     }
+    $sql = "SELECT Email FROM users WHERE Email = '$email'";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) == 0) {
+        $checkRegister = true;
+    }else{
+        $checkRegister = false;
+    }
     if ($_FILES['avatar']['error'] == 0) {
         $errAvatar = '';
     } else {
         $checkRegister = false;
     }
     if ($checkRegister) {
-        $randomName = uniqid();
-        $avatarName = $randomName . "_" . $_FILES['avatar']['name'];
-        move_uploaded_file($_FILES['avatar']['tmp_name'], 'uploads/' . $avatarName);
+        if($_FILES['avatar']['error'] != 0){
+            $avatarName = $userEdit['Avatar'];
+        }else{
+            $randomName = uniqid();
+            $avatarName = $randomName . "_" . $_FILES['avatar']['name'];
+            move_uploaded_file($_FILES['avatar']['tmp_name'], 'uploads/' . $avatarName);
+            if($userEdit['Avatar'] != 'default.jpg'){
+                unlink("uploads/" . $userEdit['Avatar']);
+            }
+        }
         $sql = "UPDATE users SET FullName='$fullName', Email='$email', Phone='$phone', Gender='$gender', Birthday='$birthday', Avatar='$avatarName' WHERE id=$id";
-        unlink("uploads/" . $userEdit['Avatar']);
         $result = mysqli_query($conn, $sql);
-        $sql = "SELECT * FROM users WHERE id=$id";
+        $sql = "SELECT * FROM users WHERE Id=$id";
         $result = mysqli_query($conn, $sql);
         $userEdit = $result->fetch_assoc();
         mysqli_close($conn);
+        
     }
 }
 ?>
@@ -155,9 +169,9 @@ if (isset($_POST['submit'])) {
                 required: true,
                 date: true
             },
-            avatar: {
-                required: true
-            },
+            // avatar: {
+            //     required: true
+            // },
             email: {
                 required: true,
                 email: true
