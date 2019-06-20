@@ -1,6 +1,5 @@
 <?php
 include_once "Connect.php";
-$fullname = $email = $gender = $phone = $avatar = $birthday = $id = '';
 ?>
 
 <!DOCTYPE html>
@@ -48,26 +47,19 @@ $fullname = $email = $gender = $phone = $avatar = $birthday = $id = '';
                         </thead>
                         <tbody>
                             <?php
-                            $sql = 'SELECT id, fullname, email, phone, gender, birthday, avatar FROM USERS';
+                            $sql = 'SELECT * FROM users';
                             $result = mysqli_query($conn, $sql);
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                $id = $row["id"];
-                                $fullname = $row["fullname"];
-                                $email = $row["email"];
-                                $phone = $row["phone"];
-                                $gender = $row["gender"];
-                                $birthday = $row["birthday"];
-                                $avatar = $row["avatar"];
+                            while ($userEdit = $result->fetch_assoc()) {
                                 echo "<tr class='row100 body' style='color: #999999'>
-                                    <td class='cell100 column2'>$fullname</td>
-                                    <td class='cell100 column2'>$email</td>
-                                    <td class='cell100 column3'>$phone</td>
-                                    <td class='cell100 column4'>$gender</td>
-                                    <td class='cell100 column5'>$birthday</td>
-                                    <td class='cell100 column6'><img src='uploads/$avatar' class='img-thumbnail' width='80px'/></td>
+                                    <td class='cell100 column2'>".$userEdit['FullName']."</td>
+                                    <td class='cell100 column2'>".$userEdit['Email']."</td>
+                                    <td class='cell100 column3'>".$userEdit['Phone']."</td>
+                                    <td class='cell100 column4'>".$userEdit['Gender']."</td>
+                                    <td class='cell100 column5'>".$userEdit['Birthday']."</td>
+                                    <td class='cell100 column6'><img src='uploads/".$userEdit['Avatar']."' class='img-thumbnail' width='80px'/></td>
                                     <td class='cell100 column6'>
-                                        <button style='color : green' type='button'><span class='	glyphicon glyphicon-list-alt' onclick=\"location.href='/batch137-142-php/Session4/Edit.php?id=$id'\"> </span></button>
-                                        <button style='color : red' type='button' onclick=\"location.href='/batch137-142-php/Session4/Delete.php?id=$id'\"><span class='glyphicon glyphicon-trash'> </span></button>
+                                        <button style='color : green' type='button'><span class='	glyphicon glyphicon-list-alt' onclick=\"location.href='Edit.php?id=".$userEdit['Id']."'\"> </span></button>
+                                        <button style='color : red' type='button' onclick=\"location.href='Delete.php?id=".$userEdit['Id']."'\"><span class='glyphicon glyphicon-trash'> </span></button>
                                      </td>
                                 </tr>";
                             }
@@ -77,7 +69,7 @@ $fullname = $email = $gender = $phone = $avatar = $birthday = $id = '';
                     </table>
                 </div>
             </div>
-            <input type="button" value="Register" class="btn btn-warning" style="cursor: pointer; margin-top: 10px" onclick="location.href='/batch137-142-php/Session4/Form_Register.php'" />
+            <input type="button" value="Register" class="btn btn-warning" style="cursor: pointer; margin-top: 10px" onclick="location.href='Form_Register.php'" />
         </div>
     </div>
 

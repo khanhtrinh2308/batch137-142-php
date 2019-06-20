@@ -2,15 +2,9 @@
 include_once "Connect.php";
 $id = $_GET['id'];
 $fullName = $birthday = $gender = $phone = $email = $avatarName = '';
-$sql = "SELECT id, fullname, email, phone, gender, birthday, avatar FROM USERS WHERE id=$id";
+$sql = "SELECT * FROM users WHERE id=$id";
 $result = mysqli_query($conn, $sql);
-$row = mysqli_fetch_assoc($result);
-$fullName = $row["fullname"];
-$email = $row["email"];
-$phone = $row["phone"];
-$gender = $row["gender"];
-$birthday = $row["birthday"];
-$avatar = $row["avatar"];
+$userEdit = $result->fetch_assoc();
 $checkRegister = true;
 if (isset($_POST['submit'])) {
     $fullName =  $_POST['full_name'];
@@ -42,8 +36,12 @@ if (isset($_POST['submit'])) {
         $randomName = uniqid();
         $avatarName = $randomName . "_" . $_FILES['avatar']['name'];
         move_uploaded_file($_FILES['avatar']['tmp_name'], 'uploads/' . $avatarName);
-        $sql = "UPDATE Users SET FullName='$fullName', Email='$email', Phone='$phone', Gender='$gender', Birthday='$birthday', Avatar='$avatarName' WHERE id=$id";
+        $sql = "UPDATE users SET FullName='$fullName', Email='$email', Phone='$phone', Gender='$gender', Birthday='$birthday', Avatar='$avatarName' WHERE id=$id";
+        unlink("uploads/" . $userEdit['Avatar']);
         $result = mysqli_query($conn, $sql);
+        $sql = "SELECT * FROM users WHERE id=$id";
+        $result = mysqli_query($conn, $sql);
+        $userEdit = $result->fetch_assoc();
         mysqli_close($conn);
     }
 }
@@ -85,23 +83,23 @@ if (isset($_POST['submit'])) {
                             <div class="form-group">
                                 <div class="form-input">
                                     <label for="full_name" class="required">Full name</label>
-                                    <input type="text" name="full_name" id="full_name" value="<?php echo $fullName ?>" />
+                                    <input type="text" name="full_name" id="full_name" value="<?php echo $userEdit['FullName'] ?>" />
                                 </div>
                                 <div class="form-input">
                                     <label for="birthday" class="required">Birthday</label>
-                                    <input type="date" name="birthday" id="birthday" value="<?php echo $birthday ?>" />
+                                    <input type="date" name="birthday" id="birthday" value="<?php echo $userEdit['Birthday'] ?>" />
                                 </div>
                                 <div class="form-input">
                                     <label for="email" class="required">Email</label>
-                                    <input type="text" name="email" id="email" value="<?php echo $email ?>" />
+                                    <input type="text" name="email" id="email" value="<?php echo $userEdit['Email'] ?>" />
                                 </div>
                                 <div class="form-input">
                                     <label for="phone_number" class="required">Phone number</label>
-                                    <input type="text" name="phone_number" id="phone_number" value="<?php echo $phone ?>" />
+                                    <input type="text" name="phone_number" id="phone_number" value="<?php echo $userEdit['Phone'] ?>" />
                                 </div>
                                 <div class="form-input">
                                     <label for="avatar" class="required">Avatar</label>
-                                    <?php echo "<img class='img-thumbnail' width='120px' src='uploads/$avatar'/>" ?>
+                                    <?php echo "<img class='img-thumbnail' width='90px' src='uploads/" . $userEdit['Avatar'] . "'/>" ?>
                                     <input type="file" name="avatar" id="avatar" />
                                 </div>
                                 <div class="form-radio">
@@ -110,24 +108,24 @@ if (isset($_POST['submit'])) {
                                     </div>
                                     <div class="form-radio-group">
                                         <div class="form-radio-item">
-                                            <input type="radio" name="gender" id="male" value="Male"<?php if($gender == "Male") {echo "checked";} ?>>
+                                            <input type="radio" name="gender" id="male" value="Male" <?php if ($userEdit['Gender'] == "Male") { echo "checked"; } ?>>
                                             <label for="male">Male</label>
                                             <span class="check"></span>
                                         </div>
                                         <div class="form-radio-item">
-                                            <input type="radio" name="gender" id="female" value="Female"<?php if($gender == "Female") {echo "checked";} ?>>
+                                            <input type="radio" name="gender" id="female" value="Female" <?php if ($userEdit['Gender'] == "Female") { echo "checked"; } ?>>
                                             <label for="female">Female</label>
                                             <span class="check"></span>
                                         </div>
                                         <div class="form-radio-item">
-                                            <input type="radio" name="gender" id="other" value="Other"<?php if($gender == "Other") {echo "checked";} ?>>
+                                            <input type="radio" name="gender" id="other" value="Other" <?php if ($userEdit['Gender'] == "Other") { echo "checked"; } ?>>
                                             <label for="other">Other</label>
                                             <span class="check"></span>
                                         </div>
                                     </div>
                                 </div>
                                 <input type="submit" value="Update" class="submit" id="submit" name="submit" />
-                                <input type="button" value="Cancel" class="submit" id="reset" name="reset" onclick="location.href='/batch137-142-php/Session4/Table_Users.php'" />
+                                <input type="button" value="Cancel" class="submit" id="reset" name="reset" onclick="location.href='Table_Users.php'" />
                             </div>
                         </div>
                     </form>

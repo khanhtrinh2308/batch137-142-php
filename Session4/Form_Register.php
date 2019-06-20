@@ -32,7 +32,7 @@ if (isset($_POST['submit'])) {
         $randomName = uniqid();
         $avatarName = $randomName . "_" . $_FILES['avatar']['name'];
         move_uploaded_file($_FILES['avatar']['tmp_name'], 'uploads/' . $avatarName);
-        $sql = "INSERT INTO Users (FullName, Email, Phone, Gender, Birthday, Avatar) VALUES ('$fullName', '$email', '$phone', '$gender', '$birthday', '$avatarName')";
+        $sql = "INSERT INTO users (FullName, Email, Phone, Gender, Birthday, Avatar) VALUES ('$fullName', '$email', '$phone', '$gender', '$birthday', '$avatarName')";
         $result = mysqli_query($conn, $sql);
         mysqli_close($conn);
         $fullName  =  '';
@@ -120,7 +120,7 @@ if (isset($_POST['submit'])) {
                                     </div>
                                 </div>
                                 <input type="submit" value="Register" class="submit" id="submit" name="submit" />
-                                <input type="button" value="Show List Users" class="submit" id="reset" name="reset" onclick="location.href='/batch137-142-php/Session4/Table_Users.php'" />
+                                <input type="button" value="Show List Users" class="submit" id="reset" name="reset" onclick="location.href='Table_Users.php'" />
                             </div>
                         </div>
                     </form>
